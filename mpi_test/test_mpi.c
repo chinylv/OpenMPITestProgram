@@ -4,7 +4,7 @@
 
 #define MAX_HOSTNAME_LENGTH 256
 
-int main(int argc, char* argv[])
+int mpi_solve(int argc, char* argv[])
 {
     int pid;
     int nump, rank, rc;
@@ -17,4 +17,9 @@ int main(int argc, char* argv[])
     printf("This is the first MPI test program.\n");
     MPI_Finalize();
     return 0;
+}
+
+int main(int argc, char* argv[])
+{
+    return mpi_solve( argc, argv );
 }
