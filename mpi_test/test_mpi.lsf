@@ -1,0 +1,13 @@
+#BUSB -q cpu
+#BSUB -J HELLO_MPI
+#BSUB -L /bin/bash
+#BSUB -o %J.out
+#BSUB -e %J.err
+#BSUB -n 32
+#BSUB -R "span[ptile=16]"
+
+MODULEPATH=/lustre/utility/modulefiles:$MODULEPATH
+module purge
+module load openmpi/gcc/1.6.5
+
+mpirun ./test_mpi

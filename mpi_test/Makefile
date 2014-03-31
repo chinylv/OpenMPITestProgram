@@ -1,29 +1,30 @@
 LOAD	= module purge && module load openmpi/gcc/1.6.5
 CC		= $(LOAD) && mpicc
-RUN		= $(LOAD) && mpirun
 
 CFLAGS	=
 LFLAGS	=
-DEFNUM	= -np 4
-HOSTS	= -machinefile hosts
 
-default	= test_mpi
-objects	= $(default).o
+DEFAULT	= test_mpi
+OBJECTS	= $(DEFAULT).o
+LSF		= $(DEFAULT).lsf
 
-all: $(default)
+all: $(DEFAULT)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c $<
 
-$(default) : $(default).o
+$(DEFAULT) : $(DEFAULT).o
 	$(CC) $(CFLAGS) -o $@ $^ $(LFLAGS)
 	-@rm -f *.o 2>&1 > /dev/null
 
-run : $(default)
-	$(RUN) $(DEFNUM) $(NUM) $(HOSTS) $^
+run : $(DEFAULT)
+	bsub < $(LSF) && bjobs 
 
 
-.PHONY: clean all
+.PHONY: clean clear all
 
 clean :
-	-@rm -f *.o $(default) 2>&1 > /dev/null
+	-@rm -f *.o $(DEFAULT) 2>&1 > /dev/null
+
+clear :
+	-@rm -f *.o $(DEFAULT) [0-9]*.err [0-9]*.out 2>&1 > /dev/null
